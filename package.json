@@ -1,0 +1,14 @@
+{
+  "name": "mini-image",
+  "version": "0.1.1",
+  "description": "用于调用TinyPng接口,压缩图片",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "liberty",
+  "license": "ISC",
+  "dependencies": {
+    "tinify": "^1.5.0"
+  }
+}
