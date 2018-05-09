@@ -24,7 +24,7 @@ package.json中加入
 
 
 
-####config.js配置文件
+#### config.js配置文件
 
 ```javascript
 module.exports = {
