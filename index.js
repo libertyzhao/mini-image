@@ -56,7 +56,7 @@ function optimize(updateImgs, cb) {
   return new Promise((rs, rj) => {
     var finishIdx = 0;
     updateImgs.forEach((filePath, index) => {
-      fs.readFile(filePath, async (err, data) => {
+      fs.readFile(resolve(`.${filePath}`), async (err, data) => {
         if (err) throw err;
         // 记录因为错误而需要重新压缩的图片队列，errEndImgIndex为终点
         if (errImg) {
