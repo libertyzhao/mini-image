@@ -152,8 +152,9 @@ function checkOptimize(enter, oldPathToMD5) {
 function createPathToMD5(enter) {
   let PathToMD5 = {};
   dfsReadDir(enter, filePath => {
+    const key = filePath.replace(process.cwd(),'');
     const md5 = crypto.createHash("md5");
-    PathToMD5[filePath] = md5.update(fs.readFileSync(filePath)).digest("hex");
+    PathToMD5[key] = md5.update(fs.readFileSync(filePath)).digest("hex");
   });
   return PathToMD5;
 }
