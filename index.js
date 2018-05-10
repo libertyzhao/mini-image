@@ -2,13 +2,13 @@ const tinify = require("tinify");
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
-function resolve(dir){
-  return path.resolve(process.cwd(),dir)
+function resolve(dir) {
+  return path.resolve(process.cwd(), dir);
 }
 const config = require(resolve(process.env.IMAGE_CONFIG));
 
-var enter = resolve(config.enter) || '';
-var configPath = resolve(config.configPath) || '';
+var enter = resolve(config.enter) || "";
+var configPath = resolve(config.configPath) || "";
 var tinifyKeys = config.tinifyKeys || [];
 var tinifyKeyIndex = 0;
 // 记录因为错误而需要重新压缩的图片队列，errEndImgIndex为终点
@@ -29,7 +29,7 @@ async function init() {
     var i = 0,
       imgs = updateImgs.slice(i * 10, 10 * (i + 1));
     for (i++; imgs.length > 0; i++) {
-      console.log(`压缩${imgs.length}个`)
+      console.log(`压缩${imgs.length}个`);
       await chunkOptimize(imgs, newPathToMD5);
       imgs = updateImgs.slice(i * 10, 10 * (i + 1));
     }
@@ -40,7 +40,6 @@ async function init() {
 }
 
 async function chunkOptimize(updateImgs, newPathToMD5) {
-
   await optimize(updateImgs, (filePath, data) => {
     const md5 = crypto.createHash("md5");
     newPathToMD5[filePath] = md5.update(data).digest("hex");
@@ -61,7 +60,7 @@ function optimize(updateImgs, cb) {
         if (err) throw err;
         // 记录因为错误而需要重新压缩的图片队列，errEndImgIndex为终点
         if (errImg) {
-          errEndImgIndex = index - 1;
+          errEndImgIndex = index;
           errImg = false;
         }
         // 存在第三张图片比第一张图片先压缩完的情况，所以如果直接用index不准确。
@@ -102,11 +101,11 @@ function updateImg(data, filePath, index, cb, length) {
 function tinifyErrorHandler(err, data, filePath, index, cb, length) {
   if (err instanceof tinify.AccountError) {
     if (tinifyKeyIndex < tinifyKeys.length) {
-      if (index > errEndImgIndex) {
+      if (index >= errEndImgIndex) {
         console.log("当前key用光了，打算换一个key重试");
         tinifyKeyIndex++;
         tinify.key = tinifyKeys[tinifyKeyIndex];
-        errEndImgIndex = length;
+        errEndImgIndex = length - 1;
         errImg = true;
       }
       return updateImg(data, filePath, index, cb, length);

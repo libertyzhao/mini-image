@@ -1,6 +1,6 @@
 {
   "name": "mini-image",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "用于调用TinyPng接口,压缩图片",
   "main": "index.js",
   "scripts": {
